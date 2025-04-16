@@ -31,6 +31,13 @@ const Chat = () => {
             uploadFile: e.target.files[0],
         }));
     };
+    const handleKeyDown = (e)=>{ 
+        if(e.key == 'Enter'){ 
+            e.preventDefault()
+            sendMessage()
+
+        }
+    }
 
 
 
@@ -57,6 +64,10 @@ const Chat = () => {
 
         if (response.ok) {
           getData()
+          setFormData((prevState) => ({
+            ...prevState,
+            comment: "",
+        }));
         } else {
           alert("There was an issue submitting your feedback.");
         }
@@ -64,6 +75,7 @@ const Chat = () => {
         alert("Error occurred while submitting the feedback.");
       }
     }
+
 
     return (
         <>
@@ -95,6 +107,7 @@ const Chat = () => {
                             name='comment'
                             type="text"
                             value={formData.comment}
+                            onKeyDown={handleKeyDown}
                             onChange={handleInputChange}
                             placeholder="Bura yeni mesaj yazın"
                             className="flex-1 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none"
