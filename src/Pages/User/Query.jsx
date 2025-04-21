@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Logo from "../Components/Logo";
-import Navigation from "../Components/Navigation";
-import Modal from "../Components/modal";
+import Logo from "../../Components/Logo";
+import Navigation from "../../Components/Navigation";
+import Modal from "../../Components/modal";
 import { useNavigate } from 'react-router-dom';
 
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Logo from "../Components/Logo";
-import Navigation from "../Components/Navigation";
+import Logo from "../../Components/Logo";
+import Navigation from "../../Components/Navigation";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 
