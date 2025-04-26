@@ -7,7 +7,7 @@ function Navigation() {
                 navigate('/')
             }} > <img src="/src/assets/user.png" alt="" /> Şəxsi məlumatlar</h2>
             <h2 className="text-[#5C5C5C] font-bold  gap-3 cursor-pointer hover-underline" onClick={() => {
-                navigate('/login')
+                navigate('/loginUser')
             }} > <img src="/src/assets/user.png" alt="" /> Müraciət İD ilə giriş </h2>
 
         </div>

@@ -50,6 +50,15 @@ const Chat = () => {
         setComments(comments)
         console.log(comments);
     }
+    const getStatus = async () => {
+        var response = await fetch(`https://localhost:5001/Employee/Comments?loginId=${loginId}`, {
+            method: "GET"
+        })
+        var data = await response.json()
+        var comments = data.result.comments
+        setComments(comments)
+        console.log(comments);
+    }
     const sendMessage = async () => {
         const form = new FormData();
         form.append("loginId",loginId );

@@ -14,11 +14,12 @@ function App() {
     <div className='overflow-hidden'>
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Query />} />
           <Route path="/feedbackTable" element={<FeedbackTable />} />
-          {/* <Route path="/login" element={<LoginUser />} />
+          <Route path="/loginUser" element={<LoginUser />} />
+          <Route path="/loginAdmin" element={<Login />} />
           <Route path="/chat" element={<Chat />} />
-          <Route path="/modal" element={<Modal />} /> */}
+          <Route path="/modal" element={<Modal />} />
         </Routes>
       </Router>
       <ToastContainer
