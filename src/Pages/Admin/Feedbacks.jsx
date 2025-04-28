@@ -37,7 +37,6 @@ export default function FeedbackTable() {
             }
             const branches = await response.json();
             var result = branches.result.branches;
-            console.log(result);
             setBranches(result);
         } catch (error) {
             console.error("Error fetching branches: ", error);
@@ -60,7 +59,19 @@ export default function FeedbackTable() {
             console.error("Error fetching feedbacks:", response.status);
         }
     };
-
+    const deleteFeedback = async (loginId) =>{ 
+        console.log(loginId)
+        const response = await fetch(`https://localhost:5001/Admin/Feedbacks/${loginId}`,{ 
+            method : "DELETE",
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+            }
+        });
+        if(response.ok){ 
+            console.log("Deleted successfuly!")
+        }
+        await listAllFeedbacks()
+    }
     useEffect(() => {
         const fetchData = async () => {
             await  getBranches()
@@ -94,7 +105,6 @@ export default function FeedbackTable() {
                     </thead>
                     <tbody>
                         {feedbacks.map(({ id,date ,loginId, branchId, statusId }) => {
-                            console.log(status)
                             const currentStatus = status.find((s) => s.id === statusId);
                             const statusName = currentStatus?.name || "Bilinmir";
                             const statusClass = statusColors[statusName] || "bg-gray-200 text-gray-700";
@@ -112,13 +122,17 @@ export default function FeedbackTable() {
                                             {statusName}
                                         </span>
                                     </td>
-                                    <td className="p-2 flex gap-2">
+                                    <td className="p-2">
                                         <button className="text-gray-600 hover:text-blue-500">
                                             <i className="fas fa-eye"></i>
                                         </button>
                                         <button className="text-gray-600 hover:text-red-500">
                                             <i className="fas fa-trash"></i>
                                         </button>
+                                    </td>
+                                    <td className="flex items-center gap-2 justify-center">
+                                        <img className="cursor-pointer" src="/src/assets/view.png" alt="" />
+                                        <img className="cursor-pointer" onClick={()=>deleteFeedback(loginId)} src="/src/assets/delete.jpg" alt=""/>
                                     </td>
                                 </tr>
                             );

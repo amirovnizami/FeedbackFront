@@ -9,7 +9,7 @@ const Chat = () => {
     }, []);
     const [formData, setFormData] = useState({
         comment: "",
-        uploadFile: null,
+        uploadFile: null
     });
     const location = useLocation();
     const params = new URLSearchParams(location.search);
@@ -31,15 +31,13 @@ const Chat = () => {
             uploadFile: e.target.files[0],
         }));
     };
-    const handleKeyDown = (e)=>{ 
-        if(e.key == 'Enter'){ 
+    const handleKeyDown = (e) => {
+        if (e.key == 'Enter') {
             e.preventDefault()
             sendMessage()
 
         }
     }
-
-
 
     const getData = async () => {
         var response = await fetch(`https://localhost:5001/Employee/Comments?loginId=${loginId}`, {
@@ -50,6 +48,7 @@ const Chat = () => {
         setComments(comments)
         console.log(comments);
     }
+
     const getStatus = async () => {
         var response = await fetch(`https://localhost:5001/Employee/Comments?loginId=${loginId}`, {
             method: "GET"
@@ -61,28 +60,27 @@ const Chat = () => {
     }
     const sendMessage = async () => {
         const form = new FormData();
-        form.append("loginId",loginId );
+        form.append("loginId", loginId);
         form.append("comment", formData.comment);
         form.append("uploadFile", formData.uploadFile);
-        console.log(form)
-    try {
-        const response = await fetch("https://localhost:5001/Employee/Comments", {
-          method: "POST",
-          body: form,
-        });
+        try {
+            const response = await fetch("https://localhost:5001/Employee/Comments", {
+                method: "POST",
+                body: form,
+            });
 
-        if (response.ok) {
-          getData()
-          setFormData((prevState) => ({
-            ...prevState,
-            comment: "",
-        }));
-        } else {
-          alert("There was an issue submitting your feedback.");
+            if (response.ok) {
+                getData()
+                setFormData((prevState) => ({
+                    ...prevState,
+                    comment: "",
+                }));
+            } else {
+                alert("There was an issue submitting your feedback.");
+            }
+        } catch (error) {
+            alert("Error occurred while submitting the feedback.");
         }
-      } catch (error) {
-        alert("Error occurred while submitting the feedback.");
-      }
     }
 
 
@@ -103,11 +101,27 @@ const Chat = () => {
 
                 {/* Form Fields */}
                 <div className="flex flex-col flex-end gap-4 mb-4">
-                    {comments.map((item) => (
-                        <div className="flex items-center w-[55%] ml-[360px] text-white bg-[#0088BE] p-[12px] rounded-[20px]">
-                            {item.text}
-                        </div>
-                    ))}
+                    {comments.map((item, index) => {
+                        const isMessageFromAdmin = item.isAdmin;
+                        let isLeft;
+
+                        if (isAdminUser) {
+                            // Admin səhifəsində (Admin sağda, User solda)
+                            isLeft = !isMessageFromAdmin; // User solda, Admin sağda
+                        } else {
+                            // Employee səhifəsində (Admin solda, User sağda)
+                            isLeft = isMessageFromAdmin; // Admin solda, User sağda
+                        }
+
+                        return (
+                            <div key={index} className={`flex ${isLeft ? 'justify-start' : 'justify-end'}`}>
+                                <div className={`p-3 rounded-2xl max-w-[55%] ${isLeft ? 'bg-gray-300 text-black' : 'bg-blue-500 text-white'}`}>
+                                    {item.text}
+                                </div>
+                            </div>
+                        );
+                    })}
+
                 </div>
                 {/* New Message Section */}
                 <div className="mt-6 pt-4 border-t border-gray-200">
