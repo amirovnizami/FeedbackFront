@@ -15,7 +15,9 @@ export default function LoginUser() {
     })
     if (response.ok) {
       
-      navigate(`/chat?loginId=${loginId}`);
+      navigate(`/chat?loginId=${loginId}`, {
+        state: { isAdminUser: false }  
+      });
       toast.success("Giriş uğurlu oldu!", {
         position: "top-right",
         autoClose: 5000,

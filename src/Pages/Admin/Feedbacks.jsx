@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 const statusColors = {
     "Yeni": "bg-yellow-200 text-yellow-700",
     "Tamamlandi": "bg-green-200 text-green-700",
@@ -6,7 +7,6 @@ const statusColors = {
     "Davam Edir": "bg-blue-200 text-blue-700",
 };
 
-import Navigation from "../../Components/Navigation";
 import Logo from "../../Components/Logo";
 
 export default function FeedbackTable() {
@@ -14,6 +14,7 @@ export default function FeedbackTable() {
     const [status, setStatus] = useState([]);
     const [feedbacks, setFeedbacks] = useState([]);
     const accessToken = localStorage.getItem('accessToken');
+    const navigate = useNavigate()
 
     const getStatus = async () => {
         const response = await fetch('https://localhost:5001/Admin/Statuses', {
@@ -59,22 +60,22 @@ export default function FeedbackTable() {
             console.error("Error fetching feedbacks:", response.status);
         }
     };
-    const deleteFeedback = async (loginId) =>{ 
+    const deleteFeedback = async (loginId) => {
         console.log(loginId)
-        const response = await fetch(`https://localhost:5001/Admin/Feedbacks/${loginId}`,{ 
-            method : "DELETE",
+        const response = await fetch(`https://localhost:5001/Admin/Feedbacks/${loginId}`, {
+            method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
             }
         });
-        if(response.ok){ 
+        if (response.ok) {
             console.log("Deleted successfuly!")
         }
         await listAllFeedbacks()
     }
     useEffect(() => {
         const fetchData = async () => {
-            await  getBranches()
+            await getBranches()
             await getStatus();
             await listAllFeedbacks();
         };
@@ -104,7 +105,7 @@ export default function FeedbackTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        {feedbacks.map(({ id,date ,loginId, branchId, statusId }) => {
+                        {feedbacks.map(({ id, date, loginId, branchId, statusId }) => {
                             const currentStatus = status.find((s) => s.id === statusId);
                             const statusName = currentStatus?.name || "Bilinmir";
                             const statusClass = statusColors[statusName] || "bg-gray-200 text-gray-700";
@@ -131,8 +132,18 @@ export default function FeedbackTable() {
                                         </button>
                                     </td>
                                     <td className="flex items-center gap-2 justify-center">
-                                        <img className="cursor-pointer" src="/src/assets/view.png" alt="" />
-                                        <img className="cursor-pointer" onClick={()=>deleteFeedback(loginId)} src="/src/assets/delete.jpg" alt=""/>
+                                        <img
+                                            className="cursor-pointer"
+                                            onClick={() => navigate(`/chat?loginId=${loginId}`, {
+                                                state: {
+                                                    isAdminUser: true,
+                                                    statusId: statusId
+                                                }
+                                            })}
+                                            src="/src/assets/view.png"
+                                            alt=""
+                                        />
+                                        <img className="cursor-pointer" onClick={() => deleteFeedback(loginId)} src="/src/assets/delete.jpg" alt="" />
                                     </td>
                                 </tr>
                             );
